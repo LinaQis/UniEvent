@@ -1,0 +1,550 @@
+body {
+    font-family: Arial;
+    margin: 0;
+    background: url('images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+header {
+    background-color: #003366;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+nav {
+    display: flex;
+    gap: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    padding: 0; /* top, left-right, bottom */
+}
+
+.left-logo {
+    width: 150px;
+    height: auto;
+    display: block;
+    margin-top: -20px;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hero-banner {
+    position: relative;
+    width: 80%;
+    max-width: 1200px;
+    height: 500px;
+    margin: 0 auto 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hero-text {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    color: #003366;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px white;
+}
+
+.hero-text span {
+    color: #003366;
+}
+
+/* ===============================
+   LOGIN / REGISTER PAGE STYLES
+   =============================== */
+
+/* === Shared Login/Register Styles === */
+
+body.form-page {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    height: 100vh;
+}
+
+.main-content {
+   display: flex;
+    flex-grow: 1;
+    height: 100vh;
+    margin-top: 0; 
+}
+
+/* Left side */
+.left-panel {
+    width: 50%;
+    padding: 40px 80px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+/* === Login page specific adjustments === */
+.form-logo {
+    width: 150px;
+    height: auto;
+    display: block;
+    margin-left: -100px;
+    margin-top: -80px;
+}
+
+/* Specific to signup page logo */
+.signup-logo {
+    width: 150px;
+    display: block;
+    margin-top: -80px;
+    margin-left: -100px;/* top, left-right, bottom */
+}
+
+.left-panel h2 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    margin-top: -30px;
+    color: #000;
+}
+
+.left-panel p {
+    margin: 0 0 20px;
+    color: #444;
+}
+
+.left-panel p1 {
+    color: #444;
+}
+
+/* Radio buttons */
+.radio-group {
+    margin-bottom: 20px;
+}
+
+.radio-group label {
+    margin-right: 20px;
+    font-size: 14px;
+    color: #222;
+}
+
+/* Form inputs */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Options row */
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.options label {
+    display: flex;
+    align-items: center;
+}
+
+.options a {
+    color: #003366;
+    text-decoration: none;
+}
+
+.options a:hover {
+    text-decoration: underline;
+}
+
+/* Login button */
+button.blue-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #003366;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button.blue-button:hover {
+    background-color: #002244;
+}
+
+/* Sign up link */
+.signup-text {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup-text a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Right side with graduation image */
+.right-panel {
+    width: 50%;
+    background: url('Web Pages/images/banner.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* Apply to all input fields uniformly */
+/* Unified Input Styling */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin: 0 0 14px 0; /* consistent spacing at the bottom only */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0; /* margin now handled by inputs */
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #000;
+}
+
+/* Terms & Policy checkbox alignment */
+.agreement-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.agreement-label input[type="checkbox"] {
+  margin: 0;
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+/* === GENERAL STYLES === */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #f4f6f9;
+}
+
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.club-dashboard .topbar {
+    background-color: #084D8A;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    font-weight: 600;
+}
+
+.club-dashboard .menu-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 15px;
+    display: none;
+}
+
+.club-dashboard .topbar-left {
+    background: #FFD93D;
+    color: #000;
+    padding: 6px 14px;
+    border-radius: 5px;
+}
+
+.club-dashboard .topbar-right {
+    font-size: 14px;
+}
+
+/* === DASHBOARD STRUCTURE === */
+.club-dashboard .dashboard-container {
+    display: flex;
+    flex-grow: 1;
+}
+
+.club-dashboard .sidebar {
+    width: 220px;
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.club-dashboard .sidebar.collapsed {
+    display: none;
+}
+
+.club-dashboard .sidebar img {
+    width: 100px;
+    display: block;
+    margin: 0 auto 30px;
+}
+
+.club-dashboard .sidebar a {
+    display: block;
+    padding: 12px 25px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.club-dashboard .sidebar a:hover {
+    background-color: #f0f0f0;
+    border-left: 5px solid #FFD93D;
+}
+
+.club-dashboard .main {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background-color: #f4f6f9;
+}
+
+.club-dashboard .headerclub {
+    background-color: #FFD93D;
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #000;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.club-dashboard .welcome-box {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* === MEMBERS + CALENDAR LAYOUT === */
+.club-dashboard .dashboard-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.club-dashboard .members-list,
+.club-dashboard .calendar-box {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* === MEMBER ITEM STYLES === */
+.club-dashboard .member-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+}
+
+.club-dashboard .member-item:first-child {
+    border-top: none;
+}
+
+.club-dashboard .member-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.club-dashboard .member-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.club-dashboard .member-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.club-dashboard .member-id {
+    font-size: 12px;
+    color: #777;
+}
+
+.club-dashboard .actions button {
+    margin-left: 10px;
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.club-dashboard .actions .approve {
+    background-color: #32d183;
+    color: white;
+}
+
+.club-dashboard .actions .reject {
+    background-color: #f14c4c;
+    color: white;
+}
+
+/* === CALENDAR === */
+#calendar {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    font-size: 12px;
+    max-width: 350px;
+    width: 100%;
+}
+
+#calendar > div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+#calendar div div {
+    width: calc(100% / 7 - 4px);
+    padding: 5px;
+    text-align: center;
+    border-radius: 4px;
+    transition: 0.2s;
+    font-size: 12px;
+}
+
+#calendar div div:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+.calendar-box h4 {
+    font-size: 12px;
+    padding: 10px;
+    margin-top: 12px;
+}
+
+#eventDetails {
+    background-color: #fef7da;
+    padding: 12px 15px;
+    border-left: 4px solid #ffd93d;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* === FOOTER === */
+.club-dashboard .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    padding: 15px 0;
+    margin-top: 40px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .club-dashboard .menu-toggle {
+        display: block;
+    }
+
+    .club-dashboard .dashboard-container {
+        flex-direction: column;
+    }
+
+    .club-dashboard .sidebar {
+        position: absolute;
+        left: -220px;
+        top: 60px;
+        height: calc(100% - 60px);
+        z-index: 1000;
+        background-color: #fff;
+        transition: left 0.3s ease;
+    }
+
+    .club-dashboard .sidebar.collapsed {
+        left: 0;
+    }
+
+    .club-dashboard .dashboard-columns {
+        flex-direction: column;
+    }
+
+    .club-dashboard .members-list,
+    .club-dashboard .calendar-box {
+        max-width: 100%;
+    }
+}
+
+.view-btn {
+    background-color: #005ecb;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-size: 13px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.view-btn:hover {
+    background-color: #0047a6;
+}

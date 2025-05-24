@@ -39,20 +39,25 @@
 
     <!-- Topbar -->
     <div class="topbar">
-        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="topbar-left">Club Gallery</div>
-        <div class="topbar-right">Home &gt; Gallery</div>
+        <div class="topbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <div class="topbar-right">
+            <span class="club-name">THE SOUND CLUB</span>
+            <img src="images/user.png" alt="Profile" class="profile-pic">
+        </div>
     </div>
 
+    <!-- Dashboard Container -->
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <img src="images/logo.png" class="left-logo" alt="Logo">
-            <a href="#">Dashboard</a>
-            <a href="#" class="active">About</a>
-            <a href="#">Feedback</a>
-            <a href="#">Activity</a>
-            <a href="#">Account</a>
+            <img src="images/logo.png" alt="Logo" class="img">
+            <a href="clubDashboard.jsp">Dashboard</a>
+            <a href="clubAboutMenu.jsp">About</a>
+            <a href="clubFeedback.jsp">Feedback</a>
+            <a href="clubActivity.jsp">Activity</a>
+            <a href="clubAccount.jsp">Account</a>
         </div>
 
         <!-- Main Content -->
@@ -66,7 +71,7 @@
             <!-- Gallery Grid -->
             <div class="gallery-grid">
                 <img src="images/gallery1.jpg" alt="Event 1">
-                <img src="images/gallery2.jpg" alt="Event 2">
+                <img src="images/gallery2.jpeg" alt="Event 2">
                 <img src="images/gallery3.jpg" alt="Event 3">
                 <img src="images/gallery4.jpg" alt="Event 4">
                 <img src="images/gallery5.jpg" alt="Event 5">

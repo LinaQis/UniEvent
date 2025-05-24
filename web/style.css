@@ -260,18 +260,21 @@ input[type="password"] {
   cursor: pointer;
 }
 
-/* === GENERAL STYLES === */
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    background-color: #f4f6f9;
-}
-
-.dashboard-page {
+body.dashboard-page {
+    background-image: none !important;
+    background-color: #dbe6f3 !important;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    margin: 0;
 }
+
+.club-dashboard {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 
 .club-dashboard .topbar {
     background-color: #084D8A;
@@ -279,8 +282,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 30px;
-    font-weight: 600;
+    padding: 10px 30px;
 }
 
 .club-dashboard .menu-toggle {
@@ -289,19 +291,25 @@ body {
     color: white;
     font-size: 24px;
     cursor: pointer;
-    margin-right: 15px;
-    display: none;
-}
-
-.club-dashboard .topbar-left {
-    background: #FFD93D;
-    color: #000;
-    padding: 6px 14px;
-    border-radius: 5px;
 }
 
 .club-dashboard .topbar-right {
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.club-name {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.profile-pic {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
 }
 
 /* === DASHBOARD STRUCTURE === */
@@ -317,6 +325,7 @@ body {
     padding-top: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    flex-shrink: 0; 
 }
 
 .club-dashboard .sidebar.collapsed {
@@ -324,9 +333,11 @@ body {
 }
 
 .club-dashboard .sidebar img {
-    width: 100px;
+    width: 120px;
+    height: 50px;
+    object-fit: cover;
     display: block;
-    margin: 0 auto 30px;
+    margin-top: -10px;
 }
 
 .club-dashboard .sidebar a {
@@ -344,10 +355,11 @@ body {
 }
 
 .club-dashboard .main {
-    flex-grow: 1;
-    padding: 30px;
-    overflow-y: auto;
-    background-color: #f4f6f9;
+  flex: 1;
+  padding: 30px;
+  background-color: #f4f6f9;
+  justify-content: space-between;
+  min-height: 100%;
 }
 
 .club-dashboard .headerclub {
@@ -356,32 +368,51 @@ body {
     font-weight: 600;
     font-size: 16px;
     color: #000;
-    border-radius: 5px;
+    border-radius: 0px;         
     margin-bottom: 20px;
+    margin-left: -30px;         /* Pull left */
+    margin-right: -30px;        /* Pull right */
+    margin-top: -30px
+}
+
+.club-dashboard .dashboard-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    align-items: flex-start;
 }
 
 .club-dashboard .welcome-box {
     background-color: #ffffff;
-    padding: 25px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+    flex: 1;
+    max-width: 48%;
+    min-height: 180px;
 }
 
 /* === MEMBERS + CALENDAR LAYOUT === */
-.club-dashboard .dashboard-columns {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+
+.club-dashboard .welcome-box.small {
+    padding: 15px 20px;
+    min-height: auto;
+    line-height: 1.4;
 }
 
-.club-dashboard .members-list,
 .club-dashboard .calendar-box {
     flex: 1;
-    min-width: 300px;
-    max-width: 600px;
+    max-width: 48%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.club-dashboard .members-list {
+    margin-top: 20px;
     background-color: white;
     padding: 25px;
     border-radius: 12px;
@@ -492,12 +523,16 @@ body {
 }
 
 /* === FOOTER === */
-.club-dashboard .footer {
+.main-footer {
+    margin-top: 63px;
+    padding: 10px 0;
     text-align: center;
     font-size: 12px;
-    color: #666;
-    padding: 15px 0;
-    margin-top: 40px;
+    background-color: #e0e0e0; /* slightly darker grey */
+    color: #333;
+    margin-left: -30px;
+    margin-right: -30px;
+    margin-bottom: -30px;
 }
 
 /* === RESPONSIVE === */
@@ -548,3 +583,113 @@ body {
 .view-btn:hover {
     background-color: #0047a6;
 }
+
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: linear-gradient(to bottom right, #D6E6FF, #A8C9F0);
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 30px;
+        }
+
+        .headerclub {
+            background-color: #FFD93D;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #000;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+            gap: 20px;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+            width: 100%; /* take full width of its grid cell */
+            box-sizing: border-box;
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .feedback-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .feedback-name {
+            font-weight: 600;
+        }
+
+        .tag {
+            background-color: #C6C2DD;
+            color: #333;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .stars {
+            color: #FFD93D;
+            margin: 10px 0;
+        }
+
+        .pagination {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pagination button {
+            background-color: #eee;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #6B46F2;
+            color: white;
+        }
+
+        .feedbackfooter {
+            margin-top: 20px;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 12px;
+            background-color: #e0e0e0;
+            color: #333;
+            margin-left: -30px;
+            margin-right: -30px;
+            margin-bottom: -30px;
+        }
+    

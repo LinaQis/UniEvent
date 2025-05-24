@@ -12,89 +12,91 @@
 
     <!-- Topbar -->
     <div class="topbar">
-        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="topbar-left">Club Dashboard</div>
-        <div class="topbar-right">THE SOUND CLUB</div>
+        <div class="topbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <div class="topbar-right">
+            <span class="club-name">THE SOUND CLUB</span>
+            <img src="images/user.png" alt="Profile" class="profile-pic">
+        </div>
     </div>
 
     <!-- Dashboard Container -->
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="left-logo">
-            <a href="#">Dashboard</a>
-            <a href="#">About</a>
-            <a href="#">Feedback</a>
-            <a href="#">Activity</a>
-            <a href="#">Account</a>
+            <img src="images/logo.png" alt="Logo" class="img">
+            <a href="clubDashboard.jsp">Dashboard</a>
+            <a href="clubAboutMenu.jsp">About</a>
+            <a href="clubFeedback.jsp">Feedback</a>
+            <a href="clubActivity.jsp">Activity</a>
+            <a href="clubAccount.jsp">Account</a>
         </div>
 
         <!-- Main Content -->
         <div class="main">
+            <div class="main-content-wrapper">
             <div class="headerclub">Club Dashboard</div>
-
-            <!-- Welcome + Calendar Section -->
+            <!-- Two Column Layout -->
             <div class="dashboard-columns">
-                <!-- Welcome Box -->
-                <div class="welcome-box small">
-                    <h3>Welcome to Management</h3>
-                    <p>Hi, Team Members</p>
-                    <p>Project activity will be updated here. Click on the name section to set your configuration.</p>
+                <!-- Left: Welcome & New Members -->
+                <div class="left-column">
+                    <div class="welcome-box small">
+                        <h3>Welcome to Management</h3>
+                        <p>Hi, Team Members</p>
+                        <p>Project activity will be updated here. Click on the name section to set your configuration.</p>
+                    </div>
+
+                    <div class="members-list">
+                        <h4>New Members</h4>
+
+                        <div class="member-item">
+                            <div class="member-info">
+                                <img src="images/profile1.png" alt="Profile">
+                                <div>
+                                    <div class="member-name">Aminah Awang</div>
+                                    <div class="member-id">2025667799</div>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="approve">Approve</button>
+                                <button class="reject">Reject</button>
+                            </div>
+                        </div>
+
+                        <div class="member-item">
+                            <div class="member-info">
+                                <img src="images/profile2.png" alt="Profile">
+                                <div>
+                                    <div class="member-name">Siti Zubaidah</div>
+                                    <div class="member-id">2025333455</div>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="approve">Approve</button>
+                                <button class="reject">Reject</button>
+                            </div>
+                        </div>
+
+                        <div style="text-align: right; margin-top: 15px;">
+                            <a href="newMember.jsp" class="view-btn">View More</a>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Calendar Box -->
+                <!-- Right: Calendar -->
                 <div class="calendar-box">
                     <h4>Upcoming Events Calendar</h4>
                     <div id="calendar"></div>
                     <div id="eventDetails"></div>
                 </div>
             </div>
-
-            <!-- Preview of New Members -->
-            <div class="members-list" style="margin-top: 30px;">
-                <h4>New Members</h4>
-
-                <!-- Member Preview 1 -->
-                <div class="member-item">
-                    <div class="member-info">
-                        <img src="images/profile1.png" alt="Profile">
-                        <div>
-                            <div class="member-name">Aminah Awang</div>
-                            <div class="member-id">2025667799</div>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button class="approve">Approve</button>
-                        <button class="reject">Reject</button>
-                    </div>
-                </div>
-
-                <!-- Member Preview 2 -->
-                <div class="member-item">
-                    <div class="member-info">
-                        <img src="images/profile2.png" alt="Profile">
-                        <div>
-                            <div class="member-name">Siti Zubaidah</div>
-                            <div class="member-id">2025333455</div>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button class="approve">Approve</button>
-                        <button class="reject">Reject</button>
-                    </div>
-                </div>
-
-                <!-- View More Button -->
-                <div style="text-align: right; margin-top: 15px;">
-                    <a href="newMember.jsp" class="view-btn">View More</a>
-                </div>
+            </div>
+            <!-- Footer -->
+                <div class="main-footer">
+                © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
             </div>
         </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
     </div>
 </div>
 

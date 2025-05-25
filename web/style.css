@@ -104,6 +104,17 @@ body.form-page {
     justify-content: flex-start;
     box-sizing: border-box;
 }
+
+/* Right side with graduation image */
+.right-panel {
+    width: 50%;
+    height: 100vh;
+    background-image: url('images/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 /* === Login page specific adjustments === */
 .form-logo {
     width: 150px;
@@ -210,13 +221,6 @@ button.blue-button:hover {
     color: #003366;
     text-decoration: none;
     font-weight: bold;
-}
-
-/* Right side with graduation image */
-.right-panel {
-    width: 50%;
-    background: url('Web Pages/images/banner.jpg') no-repeat center center;
-    background-size: cover;
 }
 
 /* Apply to all input fields uniformly */
@@ -583,14 +587,6 @@ body.dashboard-page {
 .view-btn:hover {
     background-color: #0047a6;
 }
-
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background: linear-gradient(to bottom right, #D6E6FF, #A8C9F0);
-        }
-
         .content {
             margin-left: 0;
             padding: 30px;

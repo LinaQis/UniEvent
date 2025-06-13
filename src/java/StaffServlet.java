@@ -17,9 +17,9 @@ public class StaffServlet extends HttpServlet {
         }
         
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:derby://localhost:1527/UniEventDB", "app", "app");
+                "jdbc:mysql://localhost:3306/unieventsystem?useSSL=false&allowPublicKeyRetrieval=true", "root", "");
             
             // Get staff registration requests
             Statement stmt = conn.createStatement();

@@ -23,7 +23,7 @@ public class ActivityProposalServlet extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/unieventsystem", "root", "");
+                "jdbc:mysql://localhost:3306/unieventsystem?useSSL=false&allowPublicKeyRetrieval=true", "root", "");
 
             String sql = "INSERT INTO activity (title, description, location, start_date, end_date, category, status) VALUES (?, ?, ?, ?, ?, ?, 'PENDING')";
             PreparedStatement stmt = conn.prepareStatement(sql);

@@ -16,9 +16,9 @@ public class LoginServlet extends HttpServlet {
         String redirectPage = "login.jsp?error=1";
 
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:derby://localhost:1527/UniEventDB", "app", "app");
+                "jdbc:mysql://localhost:3306/unieventsystem?useSSL=false&allowPublicKeyRetrieval=true", "root", "");
 
             String query = "";
             if ("Student".equals(role)) {

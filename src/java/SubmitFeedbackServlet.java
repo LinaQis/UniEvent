@@ -19,8 +19,9 @@ public class SubmitFeedbackServlet extends HttpServlet {
         int rating = 4; // Static star value for now
 
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/UniEventDB", "app", "app");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/unieventsystem?useSSL=false&allowPublicKeyRetrieval=true", "root", "");
 
             String sql = "INSERT INTO FEEDBACK (STUDENT_NAME, STUDENT_ID, CLUB_NAME, EVENT_NAME, RATING, COMMENTS) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);

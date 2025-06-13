@@ -19,16 +19,13 @@ public class RegisterServlet extends HttpServlet {
         String name = request.getParameter("name");
         String password = request.getParameter("password");
 
-        Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
-            // Load Derby JDBC driver
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-
-            // Connect to Derby database
-            conn = DriverManager.getConnection(
-                "jdbc:derby://localhost:1527/UniEventDB", "app", "app");
+            
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/unieventsystem?useSSL=false&allowPublicKeyRetrieval=true", "root", "");
 
             // Role-based logic
             if ("Student".equals(role)) {

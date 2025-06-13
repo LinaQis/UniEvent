@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
             String query = "";
             if ("Student".equals(role)) {
                 query = "SELECT * FROM STUDENTS WHERE STUDENT_ID = ? AND PASSWORD = ?";
-                redirectPage = "studentDashboard.jsp";
+                redirectPage = "dashboard"; // go to controller
             } else if ("Club Organizer".equals(role)) {
                 query = "SELECT * FROM CLUB_ORGANIZERS WHERE EMAIL = ? AND PASSWORD = ?";
                 redirectPage = "clubDashboard.jsp";
@@ -42,6 +42,11 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
+
+                if ("Student".equals(role)) {
+                    String fullName = rs.getString("NAME");
+                    session.setAttribute("studentName", fullName);
+                }
             }
 
             rs.close();
@@ -51,7 +56,7 @@ public class LoginServlet extends HttpServlet {
             if (isAuthenticated) {
                 response.sendRedirect(redirectPage);
             } else {
-                // Now check if the user exists to show appropriate message
+                // check user existence
                 if ("Student".equals(role)) {
                     query = "SELECT * FROM STUDENTS WHERE STUDENT_ID = ?";
                 } else if ("Club Organizer".equals(role)) {
@@ -59,15 +64,13 @@ public class LoginServlet extends HttpServlet {
                 } else if ("Admin/Staff".equals(role)) {
                     query = "SELECT * FROM STAFF WHERE STAFF_ID = ?";
                 }
-                
+
                 conn = DriverManager.getConnection("jdbc:derby://localhost:1527/UniEventDB", "app", "app");
                 stmt = conn.prepareStatement(query);
                 stmt.setString(1, username);
                 rs = stmt.executeQuery();
 
-                if (rs.next()) {
-                    userExists = true;
-                }
+                if (rs.next()) userExists = true;
 
                 rs.close();
                 stmt.close();

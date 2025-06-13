@@ -36,64 +36,51 @@
         <!-- Main Content -->
         <div class="main">
             <div class="main-content-wrapper">
-            <div class="headerclub">Club Dashboard</div>
-            <!-- Two Column Layout -->
-            <div class="dashboard-columns">
-                <!-- Left: Welcome & New Members -->
-                <div class="left-column">
-                    <div class="welcome-box small">
-                        <h3>Welcome to Management</h3>
-                        <p>Hi, Team Members</p>
-                        <p>Project activity will be updated here. Click on the name section to set your configuration.</p>
-                    </div>
+                <div class="headerclub">Club Dashboard</div>
+                <!-- Two Column Layout -->
+                <div class="dashboard-columns">
+                    <!-- Left: Welcome & New Members -->
+                    <div class="left-column">
+                        <div class="welcome-box small">
+                            <h3>Welcome to Management</h3>
+                            <p>Hi, Team Members</p>
+                            <p>Project activity will be updated here. Click on the name section to set your configuration.</p>
+                        </div>
 
-                    <div class="members-list">
-                        <h4>New Members</h4>
+                        <div class="members-list">
+                            <h4>New Members</h4>
 
-                        <div class="member-item">
-                            <div class="member-info">
-                                <img src="images/profile1.png" alt="Profile">
-                                <div>
-                                    <div class="member-name">Aminah Awang</div>
-                                    <div class="member-id">2025667799</div>
+                            <div class="member-item">
+                                <div class="member-info">
+                                    <img src="images/profile1.png" alt="Profile">
+                                    <div>
+                                        <div class="member-name">Aminah Awang</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="actions">
-                                <button class="approve">Approve</button>
-                                <button class="reject">Reject</button>
-                            </div>
-                        </div>
 
-                        <div class="member-item">
-                            <div class="member-info">
-                                <img src="images/profile2.png" alt="Profile">
-                                <div>
-                                    <div class="member-name">Siti Zubaidah</div>
-                                    <div class="member-id">2025333455</div>
+                            <div class="member-item">
+                                <div class="member-info">
+                                    <img src="images/profile2.png" alt="Profile">
+                                    <div>
+                                        <div class="member-name">Siti Zubaidah</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="actions">
-                                <button class="approve">Approve</button>
-                                <button class="reject">Reject</button>
-                            </div>
-                        </div>
 
-                        <div style="text-align: right; margin-top: 15px;">
-                            <a href="newMember.jsp" class="view-btn">View More</a>
                         </div>
                     </div>
-                </div>
 
-                <!-- Right: Calendar -->
-                <div class="calendar-box">
-                    <h4>Upcoming Events Calendar</h4>
-                    <div id="calendar"></div>
-                    <div id="eventDetails"></div>
+                    <!-- Right: Calendar -->
+                    <div class="calendar-box">
+                        <h4>Upcoming Events Calendar</h4>
+                        <div id="calendar"></div>
+                        <div id="eventDetails"></div>
+                    </div>
                 </div>
-            </div>
             </div>
             <!-- Footer -->
-                <div class="main-footer">
+            <div class="main-footer">
                 © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
             </div>
         </div>

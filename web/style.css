@@ -468,16 +468,6 @@ body.dashboard-page {
     font-weight: bold;
 }
 
-.club-dashboard .actions .approve {
-    background-color: #32d183;
-    color: white;
-}
-
-.club-dashboard .actions .reject {
-    background-color: #f14c4c;
-    color: white;
-}
-
 /* === CALENDAR === */
 #calendar {
     display: flex;
@@ -528,7 +518,7 @@ body.dashboard-page {
 
 /* === FOOTER === */
 .main-footer {
-    margin-top: 63px;
+    margin-top: 120px;
     padding: 10px 0;
     text-align: center;
     font-size: 12px;

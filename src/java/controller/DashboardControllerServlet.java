@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.*;
 import model.Event;
 import model.Achievement;
-import model.JoinedClub;
 
 @WebServlet("/dashboard")
 public class DashboardControllerServlet extends HttpServlet {
@@ -15,13 +14,19 @@ public class DashboardControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String studentName = "Hanna Lee";
-        String studentId = "20202657196";
+        HttpSession session = request.getSession(false);
+        String studentName = (String) session.getAttribute("studentName");
+        String studentId = (String) session.getAttribute("username");
+
+        if (studentName == null || studentId == null) {
+            response.sendRedirect("login.jsp?error=sessionExpired");
+            return;
+        }
 
         List<Event> inProgressEvents = Arrays.asList(
-            new Event("Blood Donation Drive", "images/event1.png", true),
-            new Event("Tree Planting Campaign", "images/event2.png", false),
-            new Event("Charity Fun Run", "images/event3.png", true)
+            new Event("Blood Donation Drive", "images/event2.jpg", true),
+            new Event("Tree Planting Campaign", "images/event3.jpg", false),
+            new Event("Charity Fun Run", "images/event4.jpg", true)
         );
 
         List<Achievement> achievements = Arrays.asList(
@@ -44,7 +49,7 @@ public class DashboardControllerServlet extends HttpServlet {
             "images/club5.png"
         );
 
-        request.setAttribute("studentName", studentName.toUpperCase());
+        request.setAttribute("studentName", studentName);
         request.setAttribute("studentId", studentId);
         request.setAttribute("inProgressEvents", inProgressEvents);
         request.setAttribute("achievements", achievements);

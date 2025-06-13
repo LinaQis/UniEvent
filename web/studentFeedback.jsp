@@ -104,11 +104,6 @@
       margin-right: 15px;
     }
 
-    .arrow {
-      margin-left: auto;
-      font-size: 16px;
-    }
-
     .topbar {
       position: fixed;
       top: 0;
@@ -179,10 +174,11 @@
 
     .main-content {
       margin-left: 220px;
-      padding: 150px 50px 100px;
+      padding: 20px 50px;
       background-color: #93c2df;
       min-height: calc(100vh - 130px);
       transition: margin-left 0.3s ease;
+      margin-bottom: -10px
     }
 
     .sidebar.collapsed ~ .main-content {
@@ -204,131 +200,82 @@
       margin-left: 60px;
     }
 
-    .profile-dropdown {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-  }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      padding: 8px 10px;
-      z-index: 9999;
-      min-width: 120px;
-    }
-
-    .dropdown-menu a {
-      text-decoration: none;
-      color: #0f60b6;
-      padding: 6px 12px;
-      display: block;
-      font-weight: 500;
-      border-radius: 6px;
-    }
-
-    .dropdown-menu a:hover {
-      background-color: #f0f0f0;
-    }
-   
-    <%--main cntent--%>
     .feedback-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 40px;
-}
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 0px;
+    }
 
-.feedback-card {
-  background: #ffffff;
-  padding: 30px 40px;
-  max-width: 600px;
-  width: 100%;
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
+    .feedback-card {
+      background: #ffffff;
+      padding: 20px 30px;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
 
-.feedback-card h2 {
-  font-size: 28px;
-  margin-bottom: 8px;
-}
+    .feedback-card h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
 
-.feedback-card p {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 24px;
-}
+    .feedback-card p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+    }
 
-.feedback-card form {
-  text-align: left;
-}
+    .feedback-card label {
+      display: block;
+      margin: 15px 0 6px;
+      font-weight: 600;
+      text-align: left;
+    }
 
-.feedback-card label {
-  display: block;
-  margin: 15px 0 6px;
-  font-weight: 600;
-}
+    .feedback-card input[type="text"],
+    .feedback-card select,
+    .feedback-card textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
 
-.feedback-card input[type="text"],
-.feedback-card textarea {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
+    .feedback-card textarea {
+      resize: none;
+    }
 
-.feedback-card textarea {
-  resize: none;
-}
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-.star-rating {
-  font-size: 28px;
-  color: #FFD700;
-  margin: 10px 0;
-}
+    .cancel-btn {
+      color: #0f60b6;
+      font-weight: 500;
+      text-decoration: none;
+    }
 
-.star-rating .inactive {
-  color: #ccc;
-}
+    .submit-btn {
+      background-color: #0f60b6;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
 
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.cancel-btn {
-  color: #0f60b6;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.submit-btn {
-  background-color: #0f60b6;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.submit-btn:hover {
-  background-color: #094a8f;
-}
-
-
+    .submit-btn:hover {
+      background-color: #094a8f;
+    }
   </style>
 </head>
 <body>
@@ -336,7 +283,6 @@
   String studentName = "Hanna Lee";
   String studentId = "20202657196";
 %>
-
 <div class="sidebar" id="sidebar">
   <div class="sidebar-toggle" onclick="toggleSidebar()">
     <img src="images/sideB.png" alt="Toggle">
@@ -347,59 +293,58 @@
   <ul class="nav-links">
     <li><a href="studentDashboard.jsp"><img src="images/db.png" alt=""><span>Dashboard</span></a></li>
     <li><a href="studentEvents.jsp"><img src="images/evt.png" alt=""><span>Events</span></a></li>
-    <li  class="active"><a href="studentFeedback.jsp"><img src="images/fbk.png" alt=""><span>Feedback</span></a></li>
+    <li class="active"><a href="studentFeedback.jsp"><img src="images/fbk.png" alt=""><span>Feedback</span></a></li>
     <li><a href="studentAccount.jsp"><img src="images/pf.png" alt=""><span>Account</span></a></li>
   </ul>
 </div>
-
 <div class="topbar" id="topbar">
   <div class="topbar-inner">
     <div class="user-info">
-        
       <div class="user-box"><%= studentName %><br><small><%= studentId %></small></div>
       <img src="images/user.jpg" alt="User">
     </div>
   </div>
 </div>
-
 <div class="sub-header" id="subHeader">
   <div>Student Feedback</div>
   <div>Home &gt; <strong>Feedback</strong></div>
 </div>
-
 <div class="main-content" id="mainContent">
-<div class="feedback-wrapper">
-  <div class="feedback-card">
-    <h2>Student Feedback</h2>
-    <p>Please help us improve our website by filling out this form.</p>
+  <div class="feedback-wrapper">
+    <div class="feedback-card">
+      <h2>Student Feedback</h2>
+      <p>Please help us improve our website by filling out this form.</p>
+      <form action="SubmitFeedbackServlet" method="post">
+        <label for="club">Club Name</label>
+        <input type="text" id="club" name="club" placeholder="Enter club name" required>
 
-    <form action="SubmitFeedbackServlet" method="post">
-      <label for="club">Club Name</label>
-      <input type="text" id="club" name="club" placeholder="Enter club name" required>
+        <label for="event">Event Name</label>
+        <input type="text" id="event" name="event" placeholder="Enter the event’s name" required>
 
-      <label for="event">Event Name</label>
-      <input type="text" id="event" name="event" placeholder="Enter the event’s name" required>
+        <label for="rating">Rating</label>
+        <select name="rating" id="rating" required>
+          <option value="">Select rating</option>
+          <option value="1">★☆☆☆☆</option>
+          <option value="2">★★☆☆☆</option>
+          <option value="3">★★★☆☆</option>
+          <option value="4">★★★★☆</option>
+          <option value="5">★★★★★</option>
+        </select>
 
-      <label>Share your experience in scaling</label>
-      <div class="star-rating">
-        <span>★</span><span>★</span><span>★</span><span>★</span><span class="inactive">★</span>
-      </div>
+        <label for="comments">Comment</label>
+        <textarea name="comments" id="comments" placeholder="Add your comments..." rows="5"></textarea>
 
-      <textarea name="comments" placeholder="Add your comments..." rows="5"></textarea>
-
-      <div class="button-group">
-        <a href="#" class="cancel-btn">Cancel</a>
-        <button type="submit" class="submit-btn">Submit</button>
-      </div>
-    </form>
+        <div class="button-group">
+          <a href="#" class="cancel-btn">Cancel</a>
+          <button type="submit" class="submit-btn">Submit</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
-    </div>
-
 <footer class="page-footer">
   &copy; Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
 </footer>
-
 <script>
   function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');

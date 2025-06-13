@@ -4,6 +4,8 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
                              http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+        <display-name>UniEvent</display-name>
+
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -22,6 +24,16 @@
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>DashboardControllerServlet</servlet-name>
+        <servlet-class>controller.DashboardControllerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DashboardControllerServlet</servlet-name>
+        <url-pattern>/studentDashboard</url-pattern>
     </servlet-mapping>
 
 </web-app>

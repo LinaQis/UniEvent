@@ -1,11 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Register - UniEvent</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
+    <style>
+        .role-specific-fields { display: none; }
+    </style>
 </head>
 <body class="form-page">
     <header>
@@ -15,107 +18,63 @@
             <a href="signup.jsp">Sign Up</a>
         </nav>
     </header>
-
     <div class="main-content">
         <div class="left-panel">
             <div class="logo-container">
-                <img src="images/logo.png" alt="UniEvent Logo" class="signup-logo">
+                <img src="${pageContext.request.contextPath}/images/logo.png" alt="UniEvent Logo" class="signup-logo">
             </div>
-
-            <h2 class="form-title">Get Start Now</h2>
-
-            <!-- ✅ Form starts here -->
+            <h2 class="form-title">Get Started Now</h2>
             <form action="RegisterServlet" method="post">
-
-                <!-- ✅ Radio buttons moved inside the form -->
-                <div class="radio-group">
+                <div class="radio-group" onchange="updateFormFields()">
                     <label><input type="radio" name="role" value="Student" checked> Student</label>
                     <label><input type="radio" name="role" value="Club Organizer"> Club Organizer</label>
                     <label><input type="radio" name="role" value="Admin/Staff"> Admin/Staff</label>
                 </div>
 
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" name="name" placeholder="Enter your name" required>
+                <div class="form-group"><label>Full Name</label><input type="text" name="name" required></div>
+                <div class="form-group"><label>Email Address</label><input type="email" name="email" required></div>
+                <div class="form-group"><label>Phone Number</label><input type="tel" name="phone" required></div>
+                <div class="form-group"><label>Password</label><input type="password" name="password" required></div>
+
+                <div id="student-organizer-fields" class="role-specific-fields">
+                    <div class="form-group"><label>Student ID</label><input type="text" name="studentId"></div>
+                    <div class="form-group"><label>Course</label><input type="text" name="course"></div>
+                    <div class="form-group"><label>Faculty</label><input type="text" name="faculty"></div>
+                </div>
+                
+                <div id="club-organizer-only-fields" class="role-specific-fields">
+                     <div class="form-group"><label>New Club Name</label><input type="text" name="clubName"></div>
+                     <div class="form-group"><label>Club Description</label><textarea name="clubDesc" rows="2"></textarea></div>
+                     <div class="form-group"><label>Club Category</label><input type="text" name="clubCategory"></div>
                 </div>
 
-                <div class="form-group role-group" id="student-fields">
-                    <label>Student No.</label>
-                    <input type="text" name="studentId" placeholder="Enter student ID">
+                <div id="staff-fields" class="role-specific-fields">
+                    <div class="form-group"><label>Staff ID</label><input type="text" name="staffId"></div>
+                    <div class="form-group"><label>Staff Role</label><input type="text" name="staffRole" placeholder="e.g., Admin"></div>
                 </div>
 
-                <div class="form-group role-group" id="club-fields">
-                    <label>Club Email</label>
-                    <input type="email" name="clubEmail" placeholder="Enter your club email">
-                </div>
-
-                <div class="form-group role-group" id="staff-fields">
-                    <label>Staff ID</label>
-                    <input type="text" name="staffId" placeholder="Enter staff ID">
-                </div>
-
-                <div class="form-group role-shared" id="email-field">
-                    <label>Email address</label>
-                    <input type="email" name="email" placeholder="Enter your email address">
-                </div>
-
-                <div class="form-group role-shared" id="phone-field">
-                    <label>Phone Number</label>
-                    <input type="tel" name="phone" placeholder="Enter your phone number">
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" placeholder="Enter your password" required>
-                </div>
-
-                <div class="form-group agreement">
-                    <label class="agreement-label">
-                        <input type="checkbox" name="terms" required>
-                        <span>I agree to the <a href="#">terms & policy</a></span>
-                    </label>
-                </div>
-
+                <div class="form-group agreement"><label class="agreement-label"><input type="checkbox" name="terms" required><span>I agree to the <a href="#">terms & policy</a></span></label></div>
                 <button type="submit" class="blue-button">Signup</button>
             </form>
+             <p class="signup-text">Already have an account? <a href="login.jsp">Log In</a></p>
         </div>
-
         <div class="right-panel"></div>
     </div>
-
     <script>
-        const roleRadios = document.querySelectorAll('input[name="role"]');
-        const studentFields = document.getElementById('student-fields');
-        const clubFields = document.getElementById('club-fields');
-        const staffFields = document.getElementById('staff-fields');
-        const emailField = document.getElementById('email-field');
-        const phoneField = document.getElementById('phone-field');
-
         function updateFormFields() {
             const role = document.querySelector('input[name="role"]:checked').value;
-            studentFields.style.display = 'none';
-            clubFields.style.display = 'none';
-            staffFields.style.display = 'none';
-            emailField.style.display = 'none';
-            phoneField.style.display = 'none';
-
-            if (role === "Student") {
-                studentFields.style.display = 'block';
-                emailField.style.display = 'block';
-                phoneField.style.display = 'block';
-            } else if (role === "Club Organizer") {
-                clubFields.style.display = 'block';
-            } else if (role === "Admin/Staff") {
-                staffFields.style.display = 'block';
-                emailField.style.display = 'block';
-                phoneField.style.display = 'block';
+            document.querySelectorAll('.role-specific-fields').forEach(el => el.style.display = 'none');
+            if (role === 'Student' || role === 'Club Organizer') {
+                document.getElementById('student-organizer-fields').style.display = 'block';
+            }
+            if (role === 'Club Organizer') {
+                document.getElementById('club-organizer-only-fields').style.display = 'block';
+            }
+            if (role === 'Admin/Staff') {
+                document.getElementById('staff-fields').style.display = 'block';
             }
         }
-
-        updateFormFields();
-        roleRadios.forEach(radio => {
-            radio.addEventListener('change', updateFormFields);
-        });
+        document.addEventListener('DOMContentLoaded', updateFormFields);
     </script>
 </body>
 </html>

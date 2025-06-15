@@ -1,135 +1,44 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.*" %>
-<%
-    String studentName = (String) session.getAttribute("studentName");
-    if (studentName == null) studentName = "Hanna Lee";
-
-    String certId = request.getParameter("certId");
-    String reason = "successfully completed the requirements.";
-    
-    if ("1".equals(certId)) {
-        reason = "participating in the Leadership Camp 2025.";
-    } else if ("2".equals(certId)) {
-        reason = "contributing in the Community Service Program.";
-    } else if ("3".equals(certId)) {
-        reason = "excellent performance in club activities.";
-    }
-
-    String currentDate = new java.text.SimpleDateFormat("dd MMMM yyyy").format(new Date());
-%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Award Certificate</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Achievement Certificate</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&family=Poppins:wght@400;600&display=swap">
     <style>
-        body {
-            margin: 0;
-            padding: 60px 0;
-            background: #eee;
-            font-family: 'Georgia', serif;
-        }
-
-        .certificate-container {
-            width: 900px;
-            margin: auto;
-            padding: 60px 50px;
-            background: #fff url('images/cert-bg.png');
-            background-size: cover;
-            border: 14px solid #0e3c68;
-            outline: 6px solid #b5cfff;
-            position: relative;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            text-align: center;
-        }
-
-        .certificate-container h1 {
-            font-size: 48px;
-            color: #000c2b;
-            margin-bottom: 40px;
-        }
-
-        .certificate-container p {
-            font-size: 18px;
-            color: #111;
-            margin: 10px 0;
-        }
-
-        .name {
-            font-size: 26px;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #001f47;
-        }
-
-        .reason {
-            font-style: italic;
-            color: #444;
-        }
-
-        .signature-block {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 60px;
-            padding: 0 40px;
-        }
-
-        .signature {
-            width: 200px;
-            border-top: 1px solid #000;
-            padding-top: 5px;
-            font-size: 14px;
-        }
-
-        .ribbon {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .print-btn {
-            display: block;
-            margin: 30px auto;
-            padding: 10px 20px;
-            background-color: #0e3c68;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        @media print {
-            .print-btn {
-                display: none;
-            }
-        }
+        body{background-color:#f4f6f9;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px 0}
+        .certificate-container{background-color:#fff;border:10px solid #c0a062;border-radius:15px;box-shadow:0 8px 16px rgba(0,0,0,.2);padding:40px;width:100%;max-width:800px;text-align:center;position:relative;margin-bottom:30px}
+        .certificate-header{font-family:'Tangerine',cursive;font-size:4.5em;color:#a07e44;margin-bottom:20px}
+        .certificate-award-to{font-family:'Poppins',sans-serif;font-size:1.2em;color:#555;margin-bottom:5px}
+        .certificate-name{font-family:'Tangerine',cursive;font-size:3.5em;color:#333;font-weight:700;margin-bottom:30px}
+        .certificate-for{font-family:'Poppins',sans-serif;font-size:1.1em;color:#444;margin-bottom:20px;line-height:1.6}
+        .certificate-signatures{display:flex;justify-content:space-around;margin-top:60px;width:90%;margin-left:auto;margin-right:auto}
+        .signature-block{text-align:center;padding-top:15px;border-top:1px solid #777;width:45%;font-family:'Poppins',sans-serif}
+        .print-button{background-color:#6b46f2;color:#fff;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-size:1em}
+        @media print{body{padding:0;margin:0}.print-button{display:none!important}}
     </style>
 </head>
 <body>
-
-<div class="certificate-container">
-    <h1>Award Certificate</h1>
-    
-    <p>Presented to</p>
-    <div class="name"><%= studentName %></div>
-    
-    <p>for</p>
-    <p class="reason"><%= reason %></p>
-
-    <div class="signature-block">
-        <div class="signature">YBRS. DR. ERMEEY ABD. KADIR(REKTOR UNIVERSITI TEKNOLOGI MARA,KUALA TERENGGANU)</div>
-        <div class="signature"><%= currentDate %></div>
+    <div class="certificate-container">
+        <c:choose>
+            <c:when test="${not empty achievement}">
+                <h1 class="certificate-header">Certificate of Achievement</h1>
+                <p class="certificate-award-to">This Certificate is Proudly Presented To</p>
+                <h2 class="certificate-name"><c:out value="${sessionScope.studentName}"/></h2>
+                <p class="certificate-for">For outstanding achievement and dedication in:<br><strong><c:out value="${achievement.title}"/></strong></p>
+                <p class="certificate-reason"><em><c:out value="${achievement.description}"/></em></p>
+                <p class="certificate-date">Awarded on: <fmt:formatDate value="${achievement.date_awarded}" pattern="MMMM dd, yyyy"/></p>
+                <div class="certificate-signatures">
+                    <div class="signature-block">Head of Student Affairs</div>
+                    <div class="signature-block">University Rector</div>
+                </div>
+            </c:when>
+            <c:otherwise><p>Certificate not found or invalid ID.</p></c:otherwise>
+        </c:choose>
     </div>
-
-    <div class="ribbon">
-        <img src="images/logo.png" alt="UniEvent" width="80">
-    </div>
-</div>
-
-<button class="print-btn" onclick="window.print()">Print Certificate</button>
-
+    <button class="print-button" onclick="window.print()">Print Certificate</button>
 </body>
 </html>

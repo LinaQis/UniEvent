@@ -1,171 +1,54 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.sql.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Club Activities - UniEvent</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <title>My Activities - UniEvent</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background: linear-gradient(to bottom right, #edf2f7, #dfe9f3);
-        }
-        .activity-container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .activity-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .activity-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #003366;
-        }
-        .add-activity-btn {
-            background-color: #4285f4;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .activity-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .activity-card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        .activity-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        .activity-status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .status-pending { background-color: #FFD93D; color: #000; }
-        .status-approved { background-color: #32d183; color: white; }
-        .status-rejected { background-color: #f14c4c; color: white; }
-        .activity-name { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #003366; }
-        .activity-details { font-size: 14px; color: #555; margin-bottom: 8px; }
-        .activity-details strong { color: #333; }
-        .footer { text-align: center; padding: 20px; color: #666; }
-
-        .popup {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 6px;
-            font-weight: 600;
-            z-index: 9999;
-            display: none;
-        }
-        .popup.success { background-color: #32d183; color: white; }
-        .popup.error { background-color: #f14c4c; color: white; }
+        .activity-table-container{overflow-x:auto;width:100%}.activity-table{width:100%;border-collapse:collapse;margin-top:20px;background-color:#fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 8px rgba(0,0,0,.05)}.activity-table th,.activity-table td{padding:12px 15px;text-align:left;border-bottom:1px solid #ddd}.activity-table th{background-color:#f2f2f2;font-weight:600;color:#333;text-transform:uppercase;font-size:.9em}.activity-table tr:hover{background-color:#f9f9f9}.activity-table td img.activity-poster{width:80px;height:50px;object-fit:cover;border-radius:4px}.status-badge{padding:5px 10px;border-radius:20px;font-size:.8em;font-weight:600;color:#fff;text-align:center;display:inline-block}.status-badge.pending{background-color:#ffc107}.status-badge.approved{background-color:#28a745}.status-badge.rejected{background-color:#dc3545}.status-badge.completed{background-color:#6c757d}.status-badge.in-progress{background-color:#007bff}.action-btns a{background-color:#6b46f2;color:#fff;padding:8px 12px;border:none;border-radius:5px;cursor:pointer;font-size:.9em;transition:background-color .2s ease;text-decoration:none;display:inline-block;text-align:center}.action-btns a:hover{background-color:#5a39d9}
     </style>
 </head>
 <body class="dashboard-page">
-<div class="club-dashboard">
-    <div class="topbar">
-        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="topbar-left">Club Activities</div>
-        <div class="topbar-right">THE SOUND CLUB</div>
-    </div>
+    <c:set var="pageTitle" value="My Activities" scope="request"/>
+    <jsp:include page="/includes/clubSidebar.jsp" />
 
-    <div class="dashboard-container">
-        <div class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="left-logo">
-            <a href="clubDashboard.jsp">Dashboard</a>
-            <a href="clubAboutMenu.jsp">About</a>
-            <a href="clubFeedback.jsp">Feedback</a>
-            <a href="#" class="active">Activity</a>
-            <a href="#">Account</a>
+    <div class="main-content">
+        <jsp:include page="/includes/mainHeader.jsp" />
+        <div class="content-header">
+            <h1>Activity List for <c:out value="${sessionScope.clubName}"/></h1>
+            <a href="${pageContext.request.contextPath}/club/activityProposal" class="btn-primary" style="background-color: #0056b3; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;">Propose New Activity</a>
         </div>
-
-        <div class="main">
-            <div class="activity-container">
-                <div class="activity-header">
-                    <h1 class="activity-title">Club Activities</h1>
-                    <a class="add-activity-btn" href="clubActivityProposal.jsp">+ Add New Activity</a>
-                </div>
-
-                <div class="activity-grid">
-                    <% 
-                        ResultSet activities = (ResultSet) request.getAttribute("activities");
-                        if (activities != null) {
-                            while (activities.next()) { 
-                                String status = activities.getString("STATUS");
-                                String statusClass = "";
-                                if ("PENDING".equals(status)) statusClass = "status-pending";
-                                else if ("APPROVED".equals(status)) statusClass = "status-approved";
-                                else if ("REJECTED".equals(status)) statusClass = "status-rejected";
-                    %>
-                    <div class="activity-card">
-                        <span class="activity-status <%= statusClass %>"><%= status %></span>
-                        <h3 class="activity-name"><%= activities.getString("TITLE") %></h3>
-                        <p class="activity-details"><%= activities.getString("DESCRIPTION") %></p>
-                        <p class="activity-details"><strong>Location:</strong> <%= activities.getString("LOCATION") %></p>
-                        <p class="activity-details"><strong>Date:</strong> <%= activities.getString("START_DATE") %> to <%= activities.getString("END_DATE") %></p>
-                        <p class="activity-details"><strong>Category:</strong> <%= activities.getString("CATEGORY") %></p>
-                    </div>
-                    <% 
-                            }
-                        } 
-                    %>
-                </div>
-            </div>
+        <div class="activity-table-container">
+            <table class="activity-table">
+                <thead>
+                    <tr>
+                        <th>Poster</th><th>Name</th><th>Category</th><th>Location</th><th>Start Date</th><th>End Date</th><th>Status</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:choose>
+                        <c:when test="${not empty activities}"><c:forEach var="activity" items="${activities}">
+                            <tr>
+                                <td><img src="${pageContext.request.contextPath}/${activity.image_path}" alt="Poster" class="activity-poster" onerror="this.onerror=null;this.src='https://placehold.co/80x50/cccccc/333333?text=No+Image';"></td>
+                                <td><c:out value="${activity.activity_name}"/></td>
+                                <td><c:out value="${activity.category_name}"/></td>
+                                <td><c:out value="${activity.activity_location}"/></td>
+                                <td><fmt:formatDate value="${activity.activity_startdate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                                <td><fmt:formatDate value="${activity.activity_enddate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                                <td><span class="status-badge ${activity.activity_status.toLowerCase().replace(' ', '-')}"><c:out value="${activity.activity_status}"/></span></td>
+                                <td class="action-btns"><a href="${pageContext.request.contextPath}/club/activityDetails?activity_id=${activity.activity_id}">Details</a></td>
+                            </tr>
+                        </c:forEach></c:when>
+                        <c:otherwise><tr><td colspan="8" style="text-align:center;padding:20px;">No activities found for this club.</td></tr></c:otherwise>
+                    </c:choose>
+                </tbody>
+            </table>
         </div>
+        <jsp:include page="/includes/mainFooter.jsp" />
     </div>
-
-    <div class="footer">
-        © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
-    </div>
-</div>
-
-<div id="popupMessage" class="popup"></div>
-
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
-        document.querySelector('.dashboard-container').classList.toggle('sidebar-collapsed');
-    }
-
-    window.onload = function () {
-        const params = new URLSearchParams(window.location.search);
-        const popup = document.getElementById("popupMessage");
-        if (params.get("popup") === "success") {
-            popup.textContent = "Activity proposal submitted successfully!";
-            popup.className = "popup success";
-            popup.style.display = "block";
-        } else if (params.get("popup") === "error") {
-            popup.textContent = "There was an error submitting the proposal.";
-            popup.className = "popup error";
-            popup.style.display = "block";
-        }
-        setTimeout(() => popup.style.display = "none", 4000);
-    };
-</script>
 </body>
 </html>

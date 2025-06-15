@@ -1,89 +1,113 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Club About - The Sound Club</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>About Our Club - UniEvent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
+    <style>
+        .about-container {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden; /* To keep the banner within the rounded corners */
+        }
+        .about-banner {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(to right, #6b46f2, #8b5cf6), url('${pageContext.request.contextPath}/images/default_banner.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+        }
+        .about-banner img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            margin-bottom: 10px;
+        }
+        .about-content {
+            padding: 30px;
+        }
+        .about-content h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .about-content .category-tag {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .about-content p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        .president-info {
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #6b46f2;
+        }
+        .president-info p {
+            margin: 0;
+            font-size: 15px;
+            color: #444;
+        }
+    </style>
 </head>
 <body class="dashboard-page">
-<div class="club-dashboard">
+    <c:set var="pageTitle" value="About Club" scope="request"/>
+    <jsp:include page="/includes/clubSidebar.jsp" />
 
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        </div>
-        <div class="topbar-right">
-            <span class="club-name">THE SOUND CLUB</span>
-            <img src="images/user.png" alt="Profile" class="profile-pic">
-        </div>
-    </div>
+    <div class="main-content">
+        <jsp:include page="/includes/mainHeader.jsp" />
 
-    <!-- Dashboard Container -->
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="img">
-            <a href="clubDashboard.jsp">Dashboard</a>
-            <a href="clubAboutMenu.jsp">About</a>
-            <a href="clubFeedback.jsp">Feedback</a>
-            <a href="clubActivity.jsp">Activity</a>
-            <a href="clubAccount.jsp">Account</a>
+        <div class="about-container">
+            <c:choose>
+                <c:when test="${not empty club}">
+                    <div class="about-banner">
+                        <div>
+                            <img src="${pageContext.request.contextPath}/${club.logo_path}" alt="Club Logo" onerror="this.onerror=null;this.src='https://placehold.co/100x100/cccccc/333333?text=Logo';">
+                            <h1><c:out value="${club.club_name}"/></h1>
+                        </div>
+                    </div>
+                    <div class="about-content">
+                        <div class="category-tag"><c:out value="${club.club_category}"/></div>
+                        <h2>About Us</h2>
+                        <p><c:out value="${club.club_desc}"/></p>
+
+                        <div class="president-info">
+                            <p><strong>Club President ID:</strong> <c:out value="${club.club_presidentID}"/></p>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="about-content" style="text-align: center;">
+                        <h2>Club Information Not Found</h2>
+                        <p>There was an error retrieving the details for your club.</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
         
-        <!-- Main -->
-        <div class="main">
-            <div class="headerclub">Club About</div>
-
-            <div style="background: url('images/about-banner.jpg') no-repeat center center; background-size: cover; height: 250px; border-radius: 0 0 40px 40px;"></div>
-
-            <div style="padding: 30px; background-color: #fff;">
-                <h2 style="font-size: 28px; font-weight: 700;">The Sound Club</h2>
-                <p style="font-size: 16px; margin-bottom: 20px;">
-                    Hey there! Welcome to UiTM’s The Sound Club!
-                </p>
-                <p style="font-size: 15px; line-height: 1.6;">
-                    Love music? Whether you're just starting out or already jamming, our club is the perfect place for you!
-                    We’re all about enjoying music, making new friends, and growing together.
-                    Our motto? <strong>“Find Your Sound, Share Your Vibe!”</strong><br><br>
-                    We believe in learning while having fun — through chill jam sessions, open mics, creative workshops,
-                    and maybe even a few exciting performances. Come join the rhythm and be part of the vibe!
-                </p>
-
-                <!-- Edit Button -->
-                <div style="text-align: right;">
-                    <button style="padding: 10px 20px; background-color: #4285f4; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
-                        Edit
-                    </button>
-                </div>
-
-                <!-- More Info / Video Section -->
-                <h3 style="margin-top: 30px;">More Info</h3>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
-                    <a href="https://www.youtube.com/" target="_blank" style="text-decoration: none;">
-                        <div style="background-color: black; color: white; padding: 15px 25px; border-radius: 10px; display: flex; align-items: center; font-weight: 600;">
-                            ▶ Watch Video
-                        </div>
-                    </a>
-                    <img src="images/video-preview.jpg" alt="Video Preview" style="width: 200px; border-radius: 10px;">
-                </div>
-            </div>
-        </div>
+        <jsp:include page="/includes/mainFooter.jsp" />
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
-    </div>
-</div>
-
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
-        document.querySelector('.dashboard-container').classList.toggle('sidebar-collapsed');
-    }
-</script>
 </body>
 </html>

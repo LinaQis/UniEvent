@@ -1,165 +1,145 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.sql.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Staff Activities - UniEvent</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Manage Activities - UniEvent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
     <style>
+        /* [NEW] Styles to beautify the table */
+        .table-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
         .activity-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            min-width: 800px;
+            font-size: 15px;
         }
-        
+
         .activity-table th, .activity-table td {
-            padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
         }
-        
+
         .activity-table th {
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
             font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .activity-table tbody tr:hover {
+            background-color: #f1f7ff;
+        }
+
+        .activity-table td {
+            color: #5a6a7e;
         }
         
-        .activity-table tr:hover {
-            background-color: #f9f9f9;
-        }
-        
-        .status-pending {
-            color: #FFD93D;
+        .activity-table td strong {
             font-weight: 600;
+            color: #333;
         }
-        
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
         }
-        
-        .approve-btn {
-            background-color: #32d183;
+        .status-approved { background-color: #28a745; }
+        .status-pending { background-color: #ffc107; color: #333; }
+        .status-rejected, .status-cancelled { background-color: #dc3545; }
+        .status-completed { background-color: #6c757d; }
+        .status-in-progress { background-color: #17a2b8; }
+
+        .view-details-btn {
+            background-color: #007bff;
             color: white;
-        }
-        
-        .reject-btn {
-            background-color: #f14c4c;
-            color: white;
-            margin-left: 5px;
-        }
-        
-        .view-btn {
-            background-color: #4285f4;
-            color: white;
+            padding: 8px 18px;
+            border-radius: 6px;
             text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .view-details-btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body class="dashboard-page">
-<div class="club-dashboard">
-    <div class="topbar">
-        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="topbar-left">Staff Activities</div>
-        <div class="topbar-right">HEP STAFF</div>
-    </div>
+    <c:set var="pageTitle" value="Activities" scope="request"/>
+    <jsp:include page="/includes/staffSidebar.jsp" />
 
-    <div class="dashboard-container">
-        <div class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="left-logo">
-            <a href="staffDashboard.jsp">Dashboard</a>
-            <a href="#" class="active">Activity</a>
-            <a href="staffReports.jsp">Reports</a>
-            <a href="#">Account</a>
-        </div>
+    <div class="main-content">
+        <jsp:include page="/includes/mainHeader.jsp" />
 
-        <div class="main">
-            <div class="headerclub">Pending Activities</div>
-            
+        <c:if test="${param.update == 'success'}">
+            <div class="status-message success-message" style="margin-bottom: 20px;">
+                Activity status has been updated successfully.
+            </div>
+        </c:if>
+
+        <div class="table-container">
             <table class="activity-table">
                 <thead>
                     <tr>
-                        <th>Activity Title</th>
+                        <th>Activity Name</th>
                         <th>Club</th>
                         <th>Date</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% 
-                        ResultSet pendingActivities = (ResultSet) request.getAttribute("pendingActivities");
-                        if (pendingActivities != null) {
-                            while (pendingActivities.next()) { 
-                    %>
-                    <tr>
-                        <td><%= pendingActivities.getString("TITLE") %></td>
-                        <td>
-                            <% 
-                                // Get club name
-                                try {
-                                    Class.forName("org.apache.derby.jdbc.ClientDriver");
-                                    Connection conn = DriverManager.getConnection(
-                                        "jdbc:derby://localhost:1527/UniEventDB", "app", "app");
-                                    
-                                    String clubQuery = "SELECT CLUB_NAME FROM CLUBS WHERE CLUB_ID = ?";
-                                    PreparedStatement clubStmt = conn.prepareStatement(clubQuery);
-                                    clubStmt.setInt(1, pendingActivities.getInt("CLUB_ID"));
-                                    ResultSet clubRs = clubStmt.executeQuery();
-                                    
-                                    if (clubRs.next()) {
-                                        out.print(clubRs.getString("CLUB_NAME"));
-                                    }
-                                    
-                                    clubRs.close();
-                                    clubStmt.close();
-                                    conn.close();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            %>
-                        </td>
-                        <td><%= pendingActivities.getString("START_DATE") %></td>
-                        <td class="status-pending"><%= pendingActivities.getString("STATUS") %></td>
-                        <td>
-                            <a href="staffActivityDetails.jsp?id=<%= pendingActivities.getInt("ACTIVITY_ID") %>" class="view-btn">View</a>
-                            <form action="ActivityServlet" method="post" style="display:inline;">
-                                <input type="hidden" name="action" value="approve">
-                                <input type="hidden" name="activityId" value="<%= pendingActivities.getInt("ACTIVITY_ID") %>">
-                                <button type="submit" class="action-btn approve-btn">Approve</button>
-                            </form>
-                            <form action="ActivityServlet" method="post" style="display:inline;">
-                                <input type="hidden" name="action" value="reject">
-                                <input type="hidden" name="activityId" value="<%= pendingActivities.getInt("ACTIVITY_ID") %>">
-                                <button type="submit" class="action-btn reject-btn">Reject</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <% 
-                            }
-                        } 
-                    %>
+                    <c:choose>
+                        <c:when test="${not empty activities}">
+                            <c:forEach var="activity" items="${activities}">
+                                <tr>
+                                    <td><strong>${activity.activity_name}</strong></td>
+                                    <td>${activity.club_name}</td>
+                                    <td><fmt:formatDate value="${activity.activity_startdate}" pattern="dd MMM, yyyy"/></td>
+                                    <td>
+                                        <span class="status-badge status-${fn:toLowerCase(activity.activity_status)}">
+                                            ${activity.activity_status}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/staff/activityDetails?activity_id=${activity.activity_id}" class="view-details-btn">View Details</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px;">No activities have been submitted yet.</td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
             </table>
         </div>
+        <jsp:include page="/includes/mainFooter.jsp" />
     </div>
-    
-    <div class="footer">
-        © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
-    </div>
-</div>
-
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
-        document.querySelector('.dashboard-container').classList.toggle('sidebar-collapsed');
-    }
-</script>
 </body>
 </html>

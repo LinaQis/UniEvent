@@ -1,192 +1,118 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.sql.*" %>
-<%
-    String activityId = request.getParameter("id");
-    if (activityId == null) {
-        response.sendRedirect("staffActivity.jsp");
-        return;
-    }
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Activity Details - UniEvent</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
     <style>
-        .activity-details {
-            background-color: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .detail-row {
-            display: flex;
-            margin-bottom: 15px;
-        }
-        
-        .detail-label {
-            font-weight: 600;
-            width: 150px;
-            color: #555;
-        }
-        
-        .detail-value {
-            flex: 1;
-        }
-        
-        .action-buttons {
-            margin-top: 30px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .action-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .approve-btn {
-            background-color: #32d183;
-            color: white;
-        }
-        
-        .reject-btn {
-            background-color: #f14c4c;
-            color: white;
-        }
-        
-        .back-btn {
-            background-color: #4285f4;
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-        }
+        .details-container { background-color: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+        .details-group { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
+        .details-group:last-child { border-bottom: none; }
+        .details-group h4 { font-size: 18px; color: #003366; margin-bottom: 10px; }
+        .details-group p { font-size: 15px; line-height: 1.6; color: #555; margin-bottom: 8px; }
+        .details-group strong { color: #333; }
+        .document-link { display: inline-block; background-color: #4285f4; color: #fff; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; margin-right: 10px; transition: background-color 0.2s ease; }
+        .document-link:hover { background-color: #3a75e0; }
+        .committee-list { list-style: none; padding: 0; }
+        .committee-list li { background-color: #f8f9fa; padding: 10px 15px; border-radius: 8px; margin-bottom: 8px; }
+        .action-buttons { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; }
+        .action-buttons button { padding: 12px 25px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 16px; }
+        .approve-btn { background-color: #28a745; color: #fff; }
+        .reject-btn { background-color: #dc3545; color: #fff; }
+        .return-btn { background-color: #6c757d; color: #fff; }
+        .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #fff; }
+        .status-badge.pending { background-color: #ffc107; color: #212529; }
+        .status-badge.approved { background-color: #28a745; }
+        .status-badge.rejected { background-color: #dc3545; }
+        .status-badge.completed { background-color: #6c757d; }
+        .status-badge.cancelled { background-color: #343a40; }
+        .status-badge.in-progress { background-color: #007bff; }
     </style>
 </head>
 <body class="dashboard-page">
-<div class="club-dashboard">
-    <div class="topbar">
-        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="topbar-left">Activity Details</div>
-        <div class="topbar-right">HEP STAFF</div>
-    </div>
+    <c:set var="pageTitle" value="Activity Details" scope="request"/>
+    <jsp:include page="/includes/staffSidebar.jsp" />
 
-    <div class="dashboard-container">
-        <div class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="left-logo">
-            <a href="staffDashboard.jsp">Dashboard</a>
-            <a href="staffActivity.jsp">Activity</a>
-            <a href="staffReports.jsp">Reports</a>
-            <a href="#">Account</a>
-        </div>
+    <div class="main-content">
+        <jsp:include page="/includes/mainHeader.jsp" />
+        <div class="details-container">
+            <c:if test="${not empty activity}">
+                <div class="details-group">
+                    <h4>Basic Information</h4>
+                    <p><strong>Activity Name:</strong> ${activity.activity_name}</p>
+                    <p><strong>Organizing Club:</strong> ${activity.club_name}</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-${fn:toLowerCase(fn:replace(activity.activity_status, '-', ''))}">${activity.activity_status}</span></p>
+                </div>
 
-        <div class="main">
-            <div class="headerclub">Activity Details</div>
-            
-            <div class="activity-details">
-                <% 
-                    try {
-                        Class.forName("org.apache.derby.jdbc.ClientDriver");
-                        Connection conn = DriverManager.getConnection(
-                            "jdbc:derby://localhost:1527/UniEventDB", "app", "app");
-                        
-                        String query = "SELECT a.*, c.CLUB_NAME FROM ACTIVITIES a JOIN CLUBS c ON a.CLUB_ID = c.CLUB_ID WHERE a.ACTIVITY_ID = ?";
-                        PreparedStatement stmt = conn.prepareStatement(query);
-                        stmt.setInt(1, Integer.parseInt(activityId));
-                        ResultSet rs = stmt.executeQuery();
-                        
-                        if (rs.next()) {
-                %>
-                <div class="detail-row">
-                    <div class="detail-label">Title:</div>
-                    <div class="detail-value"><%= rs.getString("TITLE") %></div>
+                <div class="details-group">
+                    <h4>Event Details</h4>
+                    <p><strong>Objectives:</strong> <c:out value="${activity.activity_objectives}"/></p>
+                    <p><strong>Description:</strong> <c:out value="${activity.activity_desc}"/></p>
+                    <p><strong>Target Audience:</strong> <c:out value="${activity.target_audience}"/></p>
+                </div>
+
+                <div class="details-group">
+                    <h4>Logistics</h4>
+                    <p><strong>Date & Time:</strong> <fmt:formatDate value="${activity.activity_startdate}" pattern="dd MMM, yyyy, hh:mm a"/> to <fmt:formatDate value="${activity.activity_enddate}" pattern="hh:mm a"/></p>
+                    <p><strong>Location:</strong> ${activity.activity_location}</p>
+                </div>
+
+                <div class="details-group">
+                    <h4>Budget & Documents</h4>
+                    <p><strong>Total Budget:</strong> RM <fmt:formatNumber value="${activity.total_budget}" pattern="#,##0.00"/></p>
+                    <p>
+                        <%-- 
+                            IMPORTANT NOTE FOR FILE LINKS:
+                            These links assume your server is configured to handle them. Since the files are in "C:/UniEventUploads",
+                            you must configure GlassFish to serve files from that directory when a URL like "/UniEvent/uploads/..." is requested.
+                            This is typically done by setting an "alternate docroot" or "virtual directory" in your server settings.
+                            The format below is correct if that server configuration is in place.
+                        --%>
+                        <a href="${pageContext.request.contextPath}/${activity.program_flow_path}" target="_blank" class="document-link">View Program Flow</a>
+                        <a href="${pageContext.request.contextPath}/${activity.budget_path}" target="_blank" class="document-link">View Budget</a>
+                        <a href="${pageContext.request.contextPath}/${activity.image_path}" target="_blank" class="document-link">View Poster</a>
+                    </p>
                 </div>
                 
-                <div class="detail-row">
-                    <div class="detail-label">Club:</div>
-                    <div class="detail-value"><%= rs.getString("CLUB_NAME") %></div>
+                <div class="details-group">
+                    <h4>Committee</h4>
+                    <ul class="committee-list">
+                        <c:forTokens var="rawMember" items="${activity.committee_list}" delims="&#10;&#13;">
+                            <c:set var="member" value="${fn:trim(rawMember)}"/>
+                            <c:if test="${not empty member}">
+                                <li>${member}</li>
+                            </c:if>
+                        </c:forTokens>
+                    </ul>
                 </div>
-                
-                <div class="detail-row">
-                    <div class="detail-label">Description:</div>
-                    <div class="detail-value"><%= rs.getString("DESCRIPTION") %></div>
-                </div>
-                
-                <div class="detail-row">
-                    <div class="detail-label">Location:</div>
-                    <div class="detail-value"><%= rs.getString("LOCATION") %></div>
-                </div>
-                
-                <div class="detail-row">
-                    <div class="detail-label">Start Date:</div>
-                    <div class="detail-value"><%= rs.getString("START_DATE") %></div>
-                </div>
-                
-                <div class="detail-row">
-                    <div class="detail-label">End Date:</div>
-                    <div class="detail-value"><%= rs.getString("END_DATE") %></div>
-                </div>
-                
-                <div class="detail-row">
-                    <div class="detail-label">Category:</div>
-                    <div class="detail-value"><%= rs.getString("CATEGORY") %></div>
-                </div>
-                
-                <div class="detail-row">
-                    <div class="detail-label">Status:</div>
-                    <div class="detail-value">
-                        <span style="color: <%= "PENDING".equals(rs.getString("STATUS")) ? "#FFD93D" : 
-                                              "APPROVED".equals(rs.getString("STATUS")) ? "#32d183" : "#f14c4c" %>;
-                              font-weight: 600;">
-                            <%= rs.getString("STATUS") %>
-                        </span>
+
+                <c:if test="${activity.activity_status == 'PENDING'}">
+                    <div class="action-buttons">
+                        <form action="${pageContext.request.contextPath}/staff/activityDetails" method="post" style="display:inline;">
+                            <input type="hidden" name="action" value="approveActivity">
+                            <input type="hidden" name="activity_id" value="${activity.activity_id}">
+                            <button type="submit" class="approve-btn">Approve</button>
+                        </form>
+                        <form action="${pageContext.request.contextPath}/staff/activityDetails" method="post" style="display:inline;">
+                            <input type="hidden" name="action" value="rejectActivity">
+                            <input type="hidden" name="activity_id" value="${activity.activity_id}">
+                            <button type="submit" class="reject-btn">Reject</button>
+                        </form>
                     </div>
-                </div>
-                
-                <div class="action-buttons">
-                    <form action="ActivityServlet" method="post" style="display:inline;">
-                        <input type="hidden" name="action" value="approve">
-                        <input type="hidden" name="activityId" value="<%= rs.getInt("ACTIVITY_ID") %>">
-                        <button type="submit" class="action-btn approve-btn">Approve</button>
-                    </form>
-                    <form action="ActivityServlet" method="post" style="display:inline;">
-                        <input type="hidden" name="action" value="reject">
-                        <input type="hidden" name="activityId" value="<%= rs.getInt("ACTIVITY_ID") %>">
-                        <button type="submit" class="action-btn reject-btn">Reject</button>
-                    </form>
-                    <a href="staffActivity.jsp" class="back-btn">Back to List</a>
-                </div>
-                <% 
-                        }
-                        
-                        rs.close();
-                        stmt.close();
-                        conn.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                %>
+                </c:if>
+            </c:if>
+
+            <div class="action-buttons" style="justify-content: flex-start; margin-top:20px;">
+                 <button type="button" class="return-btn" onclick="history.back()">Return to Previous Page</button>
             </div>
         </div>
+        <jsp:include page="/includes/mainFooter.jsp" />
     </div>
-    
-    <div class="footer">
-        © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
-    </div>
-</div>
-
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
-        document.querySelector('.dashboard-container').classList.toggle('sidebar-collapsed');
-    }
-</script>
 </body>
 </html>

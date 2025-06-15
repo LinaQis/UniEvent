@@ -1,163 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Past Events - UniEvent</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
     <style>
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to bottom right, #d6e6f5, #a8c9f0);
-        }
-
-        .main {
-            padding: 20px;
-        }
-
-        .headerclub {
-            background-color: #FFD93D;
-            padding: 10px 15px;
-            font-weight: 600;
-            font-size: 16px;
-            color: #000;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        .event-card {
-            background-color: #b8dcf5;
-            border-radius: 15px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.04);
-            min-height: 220px;
-            max-width: 420px;
-        }
-
-        .event-card img {
-            width: 100%;
-            height: 150px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .event-card strong {
-            display: block;
-            margin: 8px 0 4px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .event-card div {
-            font-size: 12px;
-            text-align: justify;
-            color: #333;
-        }
-
-        .most-joined {
-            max-width: 420px;
-        }
-
-        .other-events {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 11px;
-            background-color: #f4f4f4;
-            color: #555;
-        }
+        .event-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:25px;padding-bottom:20px}.event-card{background-color:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease}.event-card:hover{transform:translateY(-5px)}.event-card img{width:100%;height:180px;object-fit:cover;border-bottom:1px solid #eee}.event-card-content{padding:15px;flex-grow:1}.event-card-content h3{font-size:20px;margin-top:0;margin-bottom:10px;color:#003366}.event-details{font-size:14px;color:#555;margin-bottom:8px}
     </style>
 </head>
 <body class="dashboard-page">
-<div class="club-dashboard">
+    <c:set var="pageTitle" value="Past Events" scope="request"/>
+    <jsp:include page="/includes/clubSidebar.jsp" />
 
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        </div>
-        <div class="topbar-right">
-            <span class="club-name">THE SOUND CLUB</span>
-            <img src="images/user.png" alt="Profile" class="profile-pic">
-        </div>
-    </div>
-
-    <!-- Dashboard Container -->
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="img">
-            <a href="clubDashboard.jsp">Dashboard</a>
-            <a href="clubAboutMenu.jsp">About</a>
-            <a href="clubFeedback.jsp">Feedback</a>
-            <a href="clubActivity.jsp">Activity</a>
-            <a href="clubAccount.jsp">Account</a>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main">
-            <div class="headerclub">Past Events</div>
-
-            <!-- Most Joined Event -->
-            <h3>Most Joined</h3>
-            <div class="event-card most-joined">
-                <img src="images/event-most-joined.jpg" alt="Talent Night">
-                <div>
-                    <strong>Talent Night: The Sound of UiTM</strong>
-                    is our annual signature event, proudly hosted by The Sound Club. This musical talent show is dedicated to showcasing the incredible voices and musical talents of UiTM students.
-                </div>
-            </div>
-
-            <!-- Other Events -->
-            <h3>Others</h3>
-            <div class="other-events">
-                <div class="event-card most-joined">
-                    <img src="images/event-melacony.jpeg" alt="Malam Melacony">
-                    <div>
-                        <strong>Malam Melacony</strong>
-                        is a soulful night dedicated to music, passion, and talent. UiTM students showcase their emotions through heartfelt performances.
+    <div class="main-content">
+        <jsp:include page="/includes/mainHeader.jsp" />
+        <div class="event-grid">
+            <c:choose>
+                <c:when test="${not empty pastEvents}"><c:forEach var="activity" items="${pastEvents}">
+                    <div class="event-card">
+                        <img src="${pageContext.request.contextPath}/${activity.image_path}" onerror="this.src='${pageContext.request.contextPath}/images/default_event_poster.png'">
+                        <div class="event-card-content">
+                            <h3>${activity.activity_name}</h3>
+                            <p class="event-details"><strong>Date:</strong> <fmt:formatDate value="${activity.activity_enddate}" pattern="dd MMM, yyyy"/></p>
+                            <p class="event-details"><strong>Status:</strong> ${activity.activity_status}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="event-card most-joined">
-                    <img src="images/event-guitar.jpeg" alt="Guitar Workshop">
-                    <div>
-                        <strong>Strum & Learn: Guitar Basics Workshop</strong>
-                        is a beginner-friendly session to learn chords and strumming. Just bring your love for music!
-                    </div>
-                </div>
-            </div>
+                </c:forEach></c:when>
+                <c:otherwise><p>No past events found for this club.</p></c:otherwise>
+            </c:choose>
         </div>
+        <jsp:include page="/includes/mainFooter.jsp" />
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
-    </div>
-</div>
-
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
-        document.querySelector('.dashboard-container').classList.toggle('sidebar-collapsed');
-    }
-</script>
 </body>
 </html>

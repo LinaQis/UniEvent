@@ -1,170 +1,60 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.sql.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Staff Dashboard - UniEvent</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- [FIX] Changed the href to use the absolute context path -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
+    
     <style>
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .dashboard-card {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #555;
-        }
-        
-        .card-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #003366;
-        }
-        
-        .request-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .request-info {
-            flex: 1;
-        }
-        
-        .request-name {
-            font-weight: 600;
-        }
-        
-        .request-id {
-            font-size: 12px;
-            color: #777;
-        }
-        
-        .request-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .approve-btn {
-            background-color: #32d183;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .reject-btn {
-            background-color: #f14c4c;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        .dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:30px}.dashboard-card{background-color:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.08);text-align:center}.dashboard-card h3{font-size:1.2em;color:#555;margin-bottom:10px}.dashboard-card .count{font-size:2.5em;font-weight:700;color:#4285f4}.dashboard-section{background-color:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.08)}.dashboard-section h4{font-size:1.5em;color:#333;margin-bottom:20px;font-weight:600;border-bottom:2px solid #eee;padding-bottom:10px}.item-list{list-style:none;padding:0}.item-list li{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee}.item-list li:last-child{border-bottom:none}.item-title{font-weight:600;color:#333}.item-status{display:inline-block;padding:5px 10px;border-radius:20px;font-size:.8em;font-weight:600;color:#000;background-color:#ffd93d}.view-details-btn{background-color:#0f60b6;color:#fff;padding:8px 15px;border-radius:6px;text-decoration:none}
     </style>
 </head>
 <body class="dashboard-page">
-<div class="club-dashboard">
-    <div class="topbar">
-        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="topbar-left">Staff Dashboard</div>
-        <div class="topbar-right">HEP STAFF</div>
-    </div>
+    <c:set var="pageTitle" value="Staff Dashboard" scope="request"/>
+    <jsp:include page="/includes/staffSidebar.jsp" />
 
-    <div class="dashboard-container">
-        <div class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="left-logo">
-            <a href="staffDashboard.jsp" class="active">Dashboard</a>
-            <a href="staffActivity.jsp">Activity</a>
-            <a href="staffReports.jsp">Reports</a>
-            <a href="#">Account</a>
-        </div>
-
-        <div class="main">
-            <div class="headerclub">Staff Dashboard</div>
-            
-            <div class="dashboard-cards">
-                <div class="dashboard-card">
-                    <div class="card-title">Pending Activities</div>
-                    <div class="card-value">12</div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-title">Approved Activities</div>
-                    <div class="card-value">45</div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-title">Total Clubs</div>
-                    <div class="card-value">28</div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-title">Pending Staff Requests</div>
-                    <div class="card-value">5</div>
-                </div>
+    <div class="main-content">
+        <jsp:include page="/includes/mainHeader.jsp" />
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3>Total Activities</h3>
+                <div class="count">${totalActivities}</div>
+                <p>All events in the system.</p>
             </div>
-            
-            <div class="dashboard-card" style="margin-top: 30px;">
-                <div class="card-title">Staff Registration Requests</div>
-                
-                <% 
-                    ResultSet staffRequests = (ResultSet) request.getAttribute("staffRequests");
-                    if (staffRequests != null) {
-                        while (staffRequests.next()) { 
-                %>
-                <div class="request-item">
-                    <div class="request-info">
-                        <div class="request-name"><%= staffRequests.getString("NAME") %></div>
-                        <div class="request-id"><%= staffRequests.getString("STAFF_ID") %></div>
-                    </div>
-                    <div class="request-actions">
-                        <form action="StaffServlet" method="post" style="display:inline;">
-                            <input type="hidden" name="action" value="approve">
-                            <input type="hidden" name="requestId" value="<%= staffRequests.getInt("REQUEST_ID") %>">
-                            <button type="submit" class="approve-btn">Approve</button>
-                        </form>
-                        <form action="StaffServlet" method="post" style="display:inline;">
-                            <input type="hidden" name="action" value="reject">
-                            <input type="hidden" name="requestId" value="<%= staffRequests.getInt("REQUEST_ID") %>">
-                            <button type="submit" class="reject-btn">Reject</button>
-                        </form>
-                    </div>
-                </div>
-                <% 
-                        }
-                    } 
-                %>
+            <div class="dashboard-card">
+                <h3>Total Students</h3>
+                <div class="count">${totalStudents}</div>
+                <p>Active students in the system.</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Total Clubs</h3>
+                <div class="count">${totalClubs}</div>
+                <p>Registered clubs.</p>
             </div>
         </div>
-    </div>
-    
-    <div class="footer">
-        © Hak Cipta Universiti Teknologi MARA Cawangan Terengganu 2020
-    </div>
-</div>
 
-<script>
-    function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('collapsed');
-        document.querySelector('.dashboard-container').classList.toggle('sidebar-collapsed');
-    }
-</script>
+        <div class="dashboard-section">
+            <h4>Pending Activity Proposals</h4>
+            <ul class="item-list">
+                <c:choose>
+                    <c:when test="${not empty pendingActivities}"><c:forEach var="activity" items="${pendingActivities}">
+                        <li>
+                            <span class="item-title">${activity.activity_name} by ${activity.club_name}</span>
+                            <span class="item-status">PENDING</span>
+                            <a href="${pageContext.request.contextPath}/staff/activityDetails?activity_id=${activity.activity_id}" class="view-details-btn">View Details</a>
+                        </li>
+                    </c:forEach></c:when>
+                    <c:otherwise><li>No pending activity proposals.</li></c:otherwise>
+                </c:choose>
+            </ul>
+        </div>
+        <jsp:include page="/includes/mainFooter.jsp" />
+    </div>
 </body>
 </html>

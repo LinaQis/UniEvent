@@ -1,63 +1,88 @@
 package controller;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-import java.io.IOException;
-import java.util.*;
-import model.Event;
+import dao.AchievementDAO;
+import dao.ActivityDAO;
+import dao.ClubDAO;
+import dao.MeritDAO; // New DAO for merit
+import dao.StudentDAO;
 import model.Achievement;
+import model.Activity;
+import model.Club;
+import model.MeritEntry; // New model for merit entries
+import model.Student;
 
-@WebServlet("/dashboard")
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+@WebServlet("/student/dashboard") // Mapped to /student/dashboard
 public class DashboardControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        String studentName = (String) session.getAttribute("studentName");
-        String studentId = (String) session.getAttribute("username");
-
-        if (studentName == null || studentId == null) {
-            response.sendRedirect("login.jsp?error=sessionExpired");
+        // Ensure student is logged in
+        if (session == null || session.getAttribute("username") == null || !"Student".equals(session.getAttribute("role"))) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp?error=sessionExpired");
             return;
         }
 
-        List<Event> inProgressEvents = Arrays.asList(
-            new Event("Blood Donation Drive", "images/event2.jpg", true),
-            new Event("Tree Planting Campaign", "images/event3.jpg", false),
-            new Event("Charity Fun Run", "images/event4.jpg", true)
-        );
+        String studentId = (String) session.getAttribute("username");
+        String studentName = (String) session.getAttribute("studentName");
+        
+        try {
+            ActivityDAO activityDAO = new ActivityDAO();
+            AchievementDAO achievementDAO = new AchievementDAO();
+            StudentDAO studentDAO = new StudentDAO();
+            ClubDAO clubDAO = new ClubDAO();
+            MeritDAO meritDAO = new MeritDAO(); // Initialize MeritDAO
+            
+            // Fetch data for student dashboard
+            List<Activity> inProgressEvents = activityDAO.getInProgressEventsByStudent(studentId);
+            List<Achievement> achievements = achievementDAO.getAchievementsByStudent(studentId);
+            List<Student> topStudents = studentDAO.getTopStudents(3); // Top 3 students by merit
+            Student currentStudent = studentDAO.getStudentById(studentId); // Get current student's full data (for merit score)
+            List<Club> joinedClubs = clubDAO.getJoinedClubs(studentId);
+            
+            // For Merit Percentage/Score (based on student.student_merit)
+            int totalMerit = (currentStudent != null) ? currentStudent.getStudent_merit() : 0;
+            // The merit gauge percentage can be based on a max score, or current score directly
+            // For a simple display, we'll just pass the total merit.
+            // If you need a percentage of completed events out of total joined, use below logic
+            long completedEventsCount = activityDAO.getCompletedEventsCount(studentId);
+            long totalJoinedEventsCount = activityDAO.getTotalJoinedEventsCount(studentId);
 
-        List<Achievement> achievements = Arrays.asList(
-            new Achievement("Leadership Camp Certificate", 1),
-            new Achievement("Community Service Award", 2),
-            new Achievement("Club Excellence Recognition", 3)
-        );
+            int meritPercentage = 0; // Or calculate based on your actual merit system criteria
+            if (totalJoinedEventsCount > 0) {
+                 meritPercentage = (int) (((double)completedEventsCount / totalJoinedEventsCount) * 100);
+            }
+            
+            request.setAttribute("studentName", studentName);
+            request.setAttribute("studentId", studentId);
+            request.setAttribute("inProgressEvents", inProgressEvents);
+            request.setAttribute("achievements", achievements);
+            request.setAttribute("topStudents", topStudents);
+            request.setAttribute("meritPercentage", meritPercentage); // For dynamic gauge
+            request.setAttribute("totalMerit", totalMerit); // For actual merit score display
+            request.setAttribute("joinedClubs", joinedClubs);
+            request.setAttribute("completedEventsCount", completedEventsCount);
+            request.setAttribute("inProgressEventsCount", inProgressEvents.size());
 
-        String[] topStudents = {
-            "Mohd Hafidz Zafrel",
-            "Mohd Hana Huzairi",
-            "Nur Qaisya Alyssa"
-        };
 
-        List<String> joinedClubs = Arrays.asList(
-            "images/club1.png",
-            "images/club2.png",
-            "images/club3.png",
-            "images/club4.png",
-            "images/club5.png"
-        );
-
-        request.setAttribute("studentName", studentName);
-        request.setAttribute("studentId", studentId);
-        request.setAttribute("inProgressEvents", inProgressEvents);
-        request.setAttribute("achievements", achievements);
-        request.setAttribute("topStudents", topStudents);
-        request.setAttribute("meritPercentage", 50);
-        request.setAttribute("joinedClubs", joinedClubs);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("studentDashboard.jsp");
-        dispatcher.forward(request, response);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/studentDashboard.jsp");
+            dispatcher.forward(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the exception
+            System.err.println("SQL Error in DashboardControllerServlet doGet: " + e.getMessage());
+            throw new ServletException("Database error in Student Dashboard", e);
+        }
     }
 }
